@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { getStick, getWalker } from "./initialStates.js";
 
 const boardCofiguration = {
   width: 800,
@@ -35,22 +36,58 @@ const getInitialState = (columnsNumber, rowsNumber) => {
   const initialState = Array(rowsNumber)
     .fill()
     .map(() => Array(columnsNumber).fill(0));
-  initialState[0][0] = 1;
-  return initialState;
+  return getWalker(initialState, 10, 10);
 };
 
-const rule1 = (cells) => {
+const countNeighbours = neighbours => {
+  const alive = neighbours.filter((n) => n);
+  const dead = neighbours.filter((n) => !n);
+  return { alive: alive.length, dead: dead.length };
+};
+
+const getNeighbours = ({cells, row, column, rowsNumber, columnsNumber}) => {
+  const neighbours = [];
+  const x = row + rowsNumber;
+  const y = column + columnsNumber;
+  neighbours.push(cells[((x - 1)) % rowsNumber][(y - 1) % columnsNumber]);
+  neighbours.push(cells[x % rowsNumber][(y - 1) % columnsNumber]);
+  neighbours.push(cells[(x + 1) % rowsNumber][(y - 1) % columnsNumber]);
+  neighbours.push(cells[(x + 1) % rowsNumber][y % columnsNumber]);
+  neighbours.push(cells[(x + 1) % rowsNumber][(y + 1) % columnsNumber]);
+  neighbours.push(cells[x % rowsNumber][(y + 1) % columnsNumber]);
+  neighbours.push(cells[(x - 1) % rowsNumber][(y + 1) % columnsNumber]);
+  neighbours.push(cells[(x - 1) % rowsNumber][y % columnsNumber]);
+  return countNeighbours(neighbours);
+};
+
+// If current cell
+const rule1 = ({cells, row, column, rowsNumber, columnsNumber}) => {
+  const { alive } = getNeighbours({cells, row, column, rowsNumber, columnsNumber});
+  return (alive === 2 || alive === 3) ? 1 : 0;
+};
+
+// If current cell is dead and has 3 neighbours alive, then it back to life.
+const rule2 = ({cells, row, column, rowsNumber, columnsNumber}) => {
+  const { alive } = getNeighbours({cells, row, column, rowsNumber, columnsNumber});
+  return alive === 3 ? 1 : 0;
+};
+
+const applyRules = (cells, rowsNumber, columnsNumber) => {
   const newCells = cells.map((row) => [...row]);
-  for (const row in cells) {
-    for (const column in cells[row]) {
-      if (cells[row][column - 1]) {
-        newCells[row][column] = 1;
+  for (let row = 0; row < cells.length; row++) {
+    for (let column = 0; column < cells.length; column++) {
+      const currentCell = cells[row][column];
+      const isAlive = currentCell;
+      if (isAlive) {
+        newCells[row][column] = rule1({cells, row, column, rowsNumber, columnsNumber});
+      } else {
+        newCells[row][column] = rule2({cells, row, column, rowsNumber, columnsNumber});
       }
     }
   }
   return newCells;
 };
-
+  
 function Board() {
   const columnsNumber = getColumnsNumber(boardCofiguration);
   const rowsNumber = getRowsNumber(boardCofiguration);
@@ -62,9 +99,9 @@ function Board() {
     const getNewCells = async () => {
       const newCells = await new Promise((resolve) =>
         setTimeout(() => {
-          const newCells = rule1(cells);
+          const newCells = applyRules(cells, rowsNumber, columnsNumber);
           resolve(newCells);
-        }, 1000)
+        }, 200)
       );
       setCells(newCells);
     };
