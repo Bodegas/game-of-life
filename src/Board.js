@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getStick, getWalker } from "./initialStates.js";
+import { getInitialState1 } from "./initialStates.js";
 
 const boardCofiguration = {
   width: 800,
   height: 800,
   color: "back",
-  cellSize: 20,
+  cellSize: 10,
 };
 
 const Grid = styled.div`
@@ -14,6 +14,7 @@ const Grid = styled.div`
   width: ${({ width }) => `${width}px`};
   height: ${({ height }) => `${height}px`};
   display: grid;
+  grid-auto-flow: column;
   grid-template-columns: ${({ columnsNumber, cellSize }) =>
     `repeat(${columnsNumber}, ${cellSize}px)`};
   grid-template-rows: ${({ rowsNumber, cellSize }) =>
@@ -33,81 +34,112 @@ const getRowsNumber = (configuration) =>
   configuration.height / configuration.cellSize;
 
 const getInitialState = (columnsNumber, rowsNumber) => {
-  const initialState = Array(rowsNumber)
+  let state = Array(columnsNumber)
     .fill()
-    .map(() => Array(columnsNumber).fill(0));
-  return getWalker(initialState, 10, 10);
+    .map(() => Array(rowsNumber).fill(0));
+  return getInitialState1(state);
 };
 
-const countNeighbours = neighbours => {
+const countNeighbours = (neighbours) => {
   const alive = neighbours.filter((n) => n);
   const dead = neighbours.filter((n) => !n);
   return { alive: alive.length, dead: dead.length };
 };
 
-const getNeighbours = ({cells, row, column, rowsNumber, columnsNumber}) => {
+const getNeighbours = ({ cells, column, row, columnsNumber, rowsNumber }) => {
   const neighbours = [];
-  const x = row + rowsNumber;
-  const y = column + columnsNumber;
-  neighbours.push(cells[((x - 1)) % rowsNumber][(y - 1) % columnsNumber]);
-  neighbours.push(cells[x % rowsNumber][(y - 1) % columnsNumber]);
-  neighbours.push(cells[(x + 1) % rowsNumber][(y - 1) % columnsNumber]);
-  neighbours.push(cells[(x + 1) % rowsNumber][y % columnsNumber]);
-  neighbours.push(cells[(x + 1) % rowsNumber][(y + 1) % columnsNumber]);
-  neighbours.push(cells[x % rowsNumber][(y + 1) % columnsNumber]);
-  neighbours.push(cells[(x - 1) % rowsNumber][(y + 1) % columnsNumber]);
-  neighbours.push(cells[(x - 1) % rowsNumber][y % columnsNumber]);
+  const x = column + columnsNumber;
+  const y = row + rowsNumber;
+  neighbours.push(cells[(x - 1) % columnsNumber][(y - 1) % rowsNumber]);
+  neighbours.push(cells[x % columnsNumber][(y - 1) % rowsNumber]);
+  neighbours.push(cells[(x + 1) % columnsNumber][(y - 1) % rowsNumber]);
+  neighbours.push(cells[(x + 1) % columnsNumber][y % rowsNumber]);
+  neighbours.push(cells[(x + 1) % columnsNumber][(y + 1) % rowsNumber]);
+  neighbours.push(cells[x % columnsNumber][(y + 1) % rowsNumber]);
+  neighbours.push(cells[(x - 1) % columnsNumber][(y + 1) % rowsNumber]);
+  neighbours.push(cells[(x - 1) % columnsNumber][y % rowsNumber]);
   return countNeighbours(neighbours);
 };
 
 // If current cell
-const rule1 = ({cells, row, column, rowsNumber, columnsNumber}) => {
-  const { alive } = getNeighbours({cells, row, column, rowsNumber, columnsNumber});
-  return (alive === 2 || alive === 3) ? 1 : 0;
+const rule1 = ({ cells, row, column, rowsNumber, columnsNumber }) => {
+  const { alive } = getNeighbours({
+    cells,
+    column,
+    row,
+    columnsNumber,
+    rowsNumber,
+  });
+  return alive === 2 || alive === 3 ? 1 : 0;
 };
 
 // If current cell is dead and has 3 neighbours alive, then it back to life.
-const rule2 = ({cells, row, column, rowsNumber, columnsNumber}) => {
-  const { alive } = getNeighbours({cells, row, column, rowsNumber, columnsNumber});
+const rule2 = ({ cells, column, row, columnsNumber, rowsNumber }) => {
+  const { alive } = getNeighbours({
+    cells,
+    column,
+    row,
+    columnsNumber,
+    rowsNumber,
+  });
   return alive === 3 ? 1 : 0;
 };
 
-const applyRules = (cells, rowsNumber, columnsNumber) => {
-  const newCells = cells.map((row) => [...row]);
-  for (let row = 0; row < cells.length; row++) {
-    for (let column = 0; column < cells.length; column++) {
-      const currentCell = cells[row][column];
+const applyRules = (cells, columnsNumber, rowsNumber) => {
+  const newCells = cells.map((column) => [...column]);
+  for (let column = 0; column < cells.length; column++) {
+    for (let row = 0; row < cells.length; row++) {
+      const currentCell = cells[column][row];
       const isAlive = currentCell;
       if (isAlive) {
-        newCells[row][column] = rule1({cells, row, column, rowsNumber, columnsNumber});
+        newCells[column][row] = rule1({
+          cells,
+          column,
+          row,
+          columnsNumber,
+          rowsNumber,
+        });
       } else {
-        newCells[row][column] = rule2({cells, row, column, rowsNumber, columnsNumber});
+        newCells[column][row] = rule2({
+          cells,
+          column,
+          row,
+          columnsNumber,
+          rowsNumber,
+        });
       }
     }
   }
   return newCells;
 };
-  
+
 function Board() {
   const columnsNumber = getColumnsNumber(boardCofiguration);
   const rowsNumber = getRowsNumber(boardCofiguration);
   const [cells, setCells] = useState(() =>
-    getInitialState(rowsNumber, columnsNumber)
+    getInitialState(columnsNumber, rowsNumber)
   );
+  const [running, setRunning] = useState(true);
 
   useEffect(() => {
     const getNewCells = async () => {
       const newCells = await new Promise((resolve) =>
         setTimeout(() => {
-          const newCells = applyRules(cells, rowsNumber, columnsNumber);
+          const newCells = applyRules(cells, columnsNumber, rowsNumber);
           resolve(newCells);
         }, 200)
       );
       setCells(newCells);
     };
 
-    getNewCells();
-  }, [cells]);
+    if (running) {
+      getNewCells();
+    }
+  }, [cells, running]);
+
+  const toggleRunning = () => {
+    setRunning(running => !running);
+  };
 
   return (
     <Grid
@@ -117,8 +149,9 @@ function Board() {
       cellSize={boardCofiguration.cellSize}
       columnsNumber={columnsNumber}
       rowsNumber={rowsNumber}
+      onClick={toggleRunning}
     >
-      {cells.map((row) => row.map((cell) => <Cell alive={cell} />))}
+      {cells.map((column) => column.map((cell) => <Cell alive={cell} />))}
     </Grid>
   );
 }
