@@ -1,13 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getInitialState1 } from "./initialStates.js";
-
-const boardCofiguration = {
-  width: 800,
-  height: 800,
-  color: "back",
-  cellSize: 10,
-};
+import { getInitialState1, getInitialState2 } from "./initialStates.js";
 
 const Grid = styled.div`
   background: black;
@@ -26,12 +19,6 @@ const Cell = styled.div`
   border-top: 1px solid grey;
   border-left: 1px solid grey;
 `;
-
-const getColumnsNumber = (configuration) =>
-  configuration.width / configuration.cellSize;
-
-const getRowsNumber = (configuration) =>
-  configuration.height / configuration.cellSize;
 
 const getInitialState = (columnsNumber, rowsNumber) => {
   let state = Array(columnsNumber)
@@ -114,16 +101,21 @@ const applyRules = (cells, columnsNumber, rowsNumber) => {
 };
 
 function Board() {
-  const columnsNumber = getColumnsNumber(boardCofiguration);
-  const rowsNumber = getRowsNumber(boardCofiguration);
+  const [boardWidth, setBoardWidth] = useState(800);
+  const [boardHeight, setBoardHeight] = useState(800);
+  const [cellSize, setCellSize] = useState(20   );
+  const columnsNumber = Math.floor(boardWidth / cellSize);
+  const rowsNumber = Math.floor(boardHeight / cellSize);
+
+
   const [cells, setCells] = useState(() =>
     getInitialState(columnsNumber, rowsNumber)
   );
-  const [running, setRunning] = useState(true);
+  const [running, setRunning] = useState(false);
 
   useEffect(() => {
     const getNewCells = async () => {
-      const newCells = await new Promise((resolve) =>
+      const newCells = await new Promise(resolve =>
         setTimeout(() => {
           const newCells = applyRules(cells, columnsNumber, rowsNumber);
           resolve(newCells);
@@ -135,7 +127,7 @@ function Board() {
     if (running) {
       getNewCells();
     }
-  }, [cells, running]);
+  }, [cells, running, columnsNumber, rowsNumber, setCells]);
 
   const toggleRunning = () => {
     setRunning(running => !running);
@@ -143,10 +135,10 @@ function Board() {
 
   return (
     <Grid
-      width={boardCofiguration.width}
-      height={boardCofiguration.height}
-      color={boardCofiguration.color}
-      cellSize={boardCofiguration.cellSize}
+      width={boardWidth}
+      height={boardHeight}
+      color="black"
+      cellSize={cellSize}
       columnsNumber={columnsNumber}
       rowsNumber={rowsNumber}
       onClick={toggleRunning}
