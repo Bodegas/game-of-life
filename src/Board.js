@@ -24,7 +24,7 @@ const getInitialState = (columnsNumber, rowsNumber) => {
   let state = Array(columnsNumber)
     .fill()
     .map(() => Array(rowsNumber).fill(0));
-  return getInitialState1(state);
+  return getInitialState2(state, columnsNumber, rowsNumber);
 };
 
 const countNeighbours = (neighbours) => {
@@ -100,13 +100,15 @@ const applyRules = (cells, columnsNumber, rowsNumber) => {
   return newCells;
 };
 
+const getRightCellSize = (cellSize, boardWidth, boardHeight) => {};
+
 function Board() {
   const [boardWidth, setBoardWidth] = useState(900);
-  const [boardHeight, setBoardHeight] = useState(800);
-  const [cellSize, setCellSize] = useState(20);
+  const [boardHeight, setBoardHeight] = useState(900);
+  const [cellSize, setCellSize] = useState(12);
+  const [refreshRate, setRefreshRate] = useState(0);
   const columnsNumber = Math.floor(boardWidth / cellSize);
   const rowsNumber = Math.floor(boardHeight / cellSize);
-
   const [cells, setCells] = useState(() =>
     getInitialState(columnsNumber, rowsNumber)
   );
@@ -118,7 +120,7 @@ function Board() {
         setTimeout(() => {
           const newCells = applyRules(cells, columnsNumber, rowsNumber);
           resolve(newCells);
-        }, 200)
+        }, refreshRate)
       );
       setCells(newCells);
     };
@@ -126,7 +128,7 @@ function Board() {
     if (running) {
       getNewCells();
     }
-  }, [cells, running, columnsNumber, rowsNumber, setCells]);
+  }, [refreshRate, cells, running, columnsNumber, rowsNumber, setCells]);
 
   const toggleRunning = () => {
     setRunning((running) => !running);
@@ -134,8 +136,8 @@ function Board() {
 
   return (
     <Grid
-      width={boardWidth}
-      height={boardHeight}
+      width={columnsNumber * cellSize}
+      height={rowsNumber * cellSize}
       color="black"
       cellSize={cellSize}
       columnsNumber={columnsNumber}
