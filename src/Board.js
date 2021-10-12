@@ -75,7 +75,7 @@ const rule2 = ({ cells, column, row, columnsNumber, rowsNumber }) => {
 const applyRules = (cells, columnsNumber, rowsNumber) => {
   const newCells = cells.map((column) => [...column]);
   for (let column = 0; column < cells.length; column++) {
-    for (let row = 0; row < cells.length; row++) {
+    for (let row = 0; row < cells?.[0]?.length; row++) {
       const currentCell = cells[column][row];
       const isAlive = currentCell;
       if (isAlive) {
@@ -101,12 +101,11 @@ const applyRules = (cells, columnsNumber, rowsNumber) => {
 };
 
 function Board() {
-  const [boardWidth, setBoardWidth] = useState(800);
+  const [boardWidth, setBoardWidth] = useState(900);
   const [boardHeight, setBoardHeight] = useState(800);
-  const [cellSize, setCellSize] = useState(20   );
+  const [cellSize, setCellSize] = useState(20);
   const columnsNumber = Math.floor(boardWidth / cellSize);
   const rowsNumber = Math.floor(boardHeight / cellSize);
-
 
   const [cells, setCells] = useState(() =>
     getInitialState(columnsNumber, rowsNumber)
@@ -115,7 +114,7 @@ function Board() {
 
   useEffect(() => {
     const getNewCells = async () => {
-      const newCells = await new Promise(resolve =>
+      const newCells = await new Promise((resolve) =>
         setTimeout(() => {
           const newCells = applyRules(cells, columnsNumber, rowsNumber);
           resolve(newCells);
@@ -130,7 +129,7 @@ function Board() {
   }, [cells, running, columnsNumber, rowsNumber, setCells]);
 
   const toggleRunning = () => {
-    setRunning(running => !running);
+    setRunning((running) => !running);
   };
 
   return (
