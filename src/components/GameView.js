@@ -1,23 +1,12 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getInitialState1, getInitialState2 } from "./initialStates.js";
+import { getInitialState1, getInitialState2 } from "../initialStates.js";
+import Board from "./Board.js";
+import Form from "./Form.js";
 
-const Grid = styled.div`
-  background: black;
-  width: ${({ width }) => `${width}px`};
-  height: ${({ height }) => `${height}px`};
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-columns: ${({ columnsNumber, cellSize }) =>
-    `repeat(${columnsNumber}, ${cellSize}px)`};
-  grid-template-rows: ${({ rowsNumber, cellSize }) =>
-    `repeat(${rowsNumber}, ${cellSize}px)`};
-`;
-
-const Cell = styled.div`
-  background: ${(props) => (props.alive ? "white" : "black")};
-  border-top: 1px solid grey;
-  border-left: 1px solid grey;
+const StyledContainer = styled.div`
+  display: flex;
+  font-size: 12px;
 `;
 
 const getInitialState = (columnsNumber, rowsNumber) => {
@@ -102,7 +91,7 @@ const applyRules = (cells, columnsNumber, rowsNumber) => {
 
 const getRightCellSize = (cellSize, boardWidth, boardHeight) => {};
 
-function Board() {
+function GameView() {
   const [boardWidth, setBoardWidth] = useState(900);
   const [boardHeight, setBoardHeight] = useState(900);
   const [cellSize, setCellSize] = useState(12);
@@ -135,18 +124,26 @@ function Board() {
   };
 
   return (
-    <Grid
-      width={columnsNumber * cellSize}
-      height={rowsNumber * cellSize}
-      color="black"
-      cellSize={cellSize}
-      columnsNumber={columnsNumber}
-      rowsNumber={rowsNumber}
-      onClick={toggleRunning}
-    >
-      {cells.map((column) => column.map((cell) => <Cell alive={cell} />))}
-    </Grid>
+    <StyledContainer>
+      <Board
+        cells={cells}
+        cellSize={cellSize}
+        columnsNumber={columnsNumber}
+        rowsNumber={rowsNumber}
+        toggleRunning={toggleRunning}
+      />
+      <Form
+        boardWidth={boardWidth}
+        boardHeight={boardHeight}
+        setBoardWidth={setBoardWidth}
+        setBoardHeight={setBoardHeight}
+        cellSize={cellSize}
+        setCellSize={setCellSize}
+        refreshRate={refreshRate}
+        setRefreshRate={setRefreshRate}
+      />
+    </StyledContainer>
   );
 }
 
-export default Board;
+export default GameView;

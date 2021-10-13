@@ -155,7 +155,7 @@ export const getInitialState2 = (state, columnsNumber, rowsNumber) => {
   let newState = applyPattern({
     pattern: PULSAR,
     state: state,
-    initialX: 70,
+    initialX: 60,
     initialY: 10,
     columnsNumber,
     rowsNumber,
