@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { Formik } from "formik";
+import { useForm } from "react-hook-form";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -9,7 +9,7 @@ const StyledContainer = styled.div`
   margin-left: 4em;
 `;
 
-const StyledForm = styled.div`
+const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 2em;
@@ -38,7 +38,7 @@ const StyledSelect = styled.select`
   padding-right: 0.5em;
 `;
 
-const StyledSubmitButton = styled.button`
+const StyledSubmit = styled.input`
   margin-top: 1em;
   width: fit-content;
   padding-top: 0.5em;
@@ -57,14 +57,10 @@ const Form = ({
   refreshRate,
   setRefreshRate,
 }) => {
-  const initialValues = {
-    boardWidth,
-    boardHeight,
-    cellSize,
-    refreshRate,
-  };
+  const { register, handleSubmit } = useForm();
 
-  const handleSubmit = (values) => {
+  const onSubmit = (values) => {
+    console.log({ values });
     setBoardWidth(values.boardWidth);
     setBoardHeight(values.boardHeight);
     setCellSize(values.cellSize);
@@ -74,59 +70,43 @@ const Form = ({
   return (
     <StyledContainer>
       <StyledFormHead>Board setup</StyledFormHead>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-        {({ values, handleSubmit, setFieldValue }) => (
-          <StyledForm onSubmit={handleSubmit}>
-            <StyledLabel htmlFor="boardWidth">Width</StyledLabel>
-            <StyledSelect
-              name="boardWidth"
-              value={values.boardWidth}
-              onChange={(event) =>
-                setFieldValue("boardWidth", event.target.value)
-              }
-            >
-              <option value={700}>700</option>
-              <option value={800}>800</option>
-              <option value={900}>900</option>
-            </StyledSelect>
-            <StyledLabel htmlFor="boardHeight">Height</StyledLabel>
-            <StyledSelect
-              name="boardHeight"
-              value={values.boardHeight}
-              onChange={(event) =>
-                setFieldValue("boardHeight", event.target.value)
-              }
-            >
-              <option value={700}>700</option>
-              <option value={800}>800</option>
-              <option value={900}>900</option>
-            </StyledSelect>
-            <StyledLabel htmlFor="cellSize">Cell size</StyledLabel>
-            <StyledSelect
-              name="cellSize"
-              value={values.cellSize}
-              onChange={(event) =>
-                setFieldValue("cellSize", event.target.value)
-              }
-            >
-              <option value={10}>10</option>
-              <option value={15}>15</option>
-              <option value={20}>20</option>
-            </StyledSelect>
-            <StyledLabel htmlFor="refreshRate">Refresh rate</StyledLabel>
-            <StyledInput
-              name="refreshRate"
-              value={values.refreshRate}
-              onChange={(event) =>
-                setFieldValue("refreshRate", event.target.value)
-              }
-            />
-            <StyledSubmitButton type="submit" onClick={handleSubmit}>
-              Apply
-            </StyledSubmitButton>
-          </StyledForm>
-        )}
-      </Formik>
+      <StyledForm onSubmit={handleSubmit(onSubmit)}>
+        <StyledLabel htmlFor="boardWidth">Width</StyledLabel>
+        <StyledSelect
+          {...register("boardWidth", { setValueAs: (v) => parseInt(v) })}
+          defaultValue={boardWidth}
+        >
+          <option value={700}>700</option>
+          <option value={800}>800</option>
+          <option value={900}>900</option>
+        </StyledSelect>
+        <StyledLabel htmlFor="boardHeight">Height</StyledLabel>
+        <StyledSelect
+          {...register("boardHeight", { setValueAs: (v) => parseInt(v) })}
+          defaultValue={boardHeight}
+        >
+          <option value={700}>700</option>
+          <option value={800}>800</option>
+          <option value={900}>900</option>
+        </StyledSelect>
+        <StyledLabel htmlFor="cellSize">Cell size</StyledLabel>
+        <StyledSelect
+          {...register("cellSize", { setValueAs: (v) => parseInt(v) })}
+          type="number"
+          defaultValue={cellSize}
+        >
+          <option value={10}>10</option>
+          <option value={15}>15</option>
+          <option value={20}>20</option>
+        </StyledSelect>
+        <StyledLabel htmlFor="refreshRate">Refresh rate</StyledLabel>
+        <StyledInput
+          {...register("refreshRate", { setValueAs: (v) => parseInt(v) })}
+          type="number"
+          defaultValue={refreshRate}
+        />
+        <StyledSubmit type="submit" value="Apply" />
+      </StyledForm>
     </StyledContainer>
   );
 };

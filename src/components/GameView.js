@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getInitialState1, getInitialState2 } from "../initialStates.js";
+// import { getInitialState1, getInitialState2 } from "../initialStates.js";
+import { getInitialState2 } from "../initialStates.js";
 import Board from "./Board.js";
 import Form from "./Form.js";
 
@@ -88,8 +89,6 @@ const applyRules = (cells, columnsNumber, rowsNumber) => {
   }
   return newCells;
 };
-
-const getRightCellSize = (cellSize, boardWidth, boardHeight) => {};
 
 function GameView() {
   const [boardWidth, setBoardWidth] = useState(900);

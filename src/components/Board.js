@@ -37,7 +37,7 @@ const Board = ({
       rowsNumber={rowsNumber}
       onClick={toggleRunning}
     >
-      {cells.map((column) => column.map((cell) => <Cell alive={cell} />))}
+      {cells.map((column) => column.map((cell, index) => <Cell key={index} alive={cell} />))}
     </Grid>
   );
 };
