@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-// import { getInitialState1, getInitialState2 } from "../initialStates.js";
-import { getInitialState2 } from "../initialStates.js";
+import { getColumsNumber, getRowsNumber } from "../helpers";
 import Board from "./Board.js";
-import Form from "./Form.js";
+import ConfigurationBoardForm from "./ConfigurationBoardForm.js";
+import PatternsForm from "./PatternsForm";
 
 const StyledContainer = styled.div`
   display: flex;
   font-size: 12px;
 `;
 
-const getInitialState = (columnsNumber, rowsNumber) => {
+const getEmptyCellsState = (boardWidth, boardHeight, cellSize) => {
+  const columnsNumber = getColumsNumber(boardWidth, cellSize);
+  const rowsNumber = getRowsNumber(boardHeight, cellSize);
   let state = Array(columnsNumber)
     .fill()
     .map(() => Array(rowsNumber).fill(0));
-  return getInitialState2(state, columnsNumber, rowsNumber);
+  return state;
 };
 
 const countNeighbours = (neighbours) => {
@@ -23,7 +25,9 @@ const countNeighbours = (neighbours) => {
   return { alive: alive.length, dead: dead.length };
 };
 
-const getNeighbours = ({ cells, column, row, columnsNumber, rowsNumber }) => {
+const getNeighbours = ({ cells, column, row }) => {
+  const columnsNumber = cells.length;
+  const rowsNumber = cells[0].length;
   const neighbours = [];
   const x = column + columnsNumber;
   const y = row + rowsNumber;
@@ -39,30 +43,26 @@ const getNeighbours = ({ cells, column, row, columnsNumber, rowsNumber }) => {
 };
 
 // If current cell
-const rule1 = ({ cells, row, column, rowsNumber, columnsNumber }) => {
+const rule1 = ({ cells, row, column }) => {
   const { alive } = getNeighbours({
     cells,
     column,
     row,
-    columnsNumber,
-    rowsNumber,
   });
   return alive === 2 || alive === 3 ? 1 : 0;
 };
 
 // If current cell is dead and has 3 neighbours alive, then it back to life.
-const rule2 = ({ cells, column, row, columnsNumber, rowsNumber }) => {
+const rule2 = ({ cells, column, row }) => {
   const { alive } = getNeighbours({
     cells,
     column,
     row,
-    columnsNumber,
-    rowsNumber,
   });
   return alive === 3 ? 1 : 0;
 };
 
-const applyRules = (cells, columnsNumber, rowsNumber) => {
+const applyRules = (cells) => {
   const newCells = cells.map((column) => [...column]);
   for (let column = 0; column < cells.length; column++) {
     for (let row = 0; row < cells?.[0]?.length; row++) {
@@ -73,16 +73,12 @@ const applyRules = (cells, columnsNumber, rowsNumber) => {
           cells,
           column,
           row,
-          columnsNumber,
-          rowsNumber,
         });
       } else {
         newCells[column][row] = rule2({
           cells,
           column,
           row,
-          columnsNumber,
-          rowsNumber,
         });
       }
     }
@@ -93,12 +89,10 @@ const applyRules = (cells, columnsNumber, rowsNumber) => {
 function GameView() {
   const [boardWidth, setBoardWidth] = useState(900);
   const [boardHeight, setBoardHeight] = useState(900);
-  const [cellSize, setCellSize] = useState(12);
+  const [cellSize, setCellSize] = useState(10);
   const [refreshRate, setRefreshRate] = useState(0);
-  const columnsNumber = Math.floor(boardWidth / cellSize);
-  const rowsNumber = Math.floor(boardHeight / cellSize);
   const [cells, setCells] = useState(() =>
-    getInitialState(columnsNumber, rowsNumber)
+    getEmptyCellsState(boardWidth, boardHeight, cellSize)
   );
   const [running, setRunning] = useState(false);
 
@@ -106,7 +100,7 @@ function GameView() {
     const getNewCells = async () => {
       const newCells = await new Promise((resolve) =>
         setTimeout(() => {
-          const newCells = applyRules(cells, columnsNumber, rowsNumber);
+          const newCells = applyRules(cells);
           resolve(newCells);
         }, refreshRate)
       );
@@ -116,7 +110,11 @@ function GameView() {
     if (running) {
       getNewCells();
     }
-  }, [refreshRate, cells, running, columnsNumber, rowsNumber, setCells]);
+  }, [refreshRate, cells, running, setCells]);
+
+  useEffect(() => {
+    setCells(getEmptyCellsState(boardWidth, boardHeight, cellSize));
+  }, [boardWidth, boardHeight, cellSize]);
 
   const toggleRunning = () => {
     setRunning((running) => !running);
@@ -124,23 +122,24 @@ function GameView() {
 
   return (
     <StyledContainer>
+      <ConfigurationBoardForm
+        boardHeight={boardHeight}
+        boardWidth={boardWidth}
+        cellSize={cellSize}
+        refreshRate={refreshRate}
+        setBoardHeight={setBoardHeight}
+        setBoardWidth={setBoardWidth}
+        setCellSize={setCellSize}
+        setRefreshRate={setRefreshRate}
+      />
       <Board
         cells={cells}
         cellSize={cellSize}
-        columnsNumber={columnsNumber}
-        rowsNumber={rowsNumber}
+        height={boardHeight}
         toggleRunning={toggleRunning}
+        width={boardWidth}
       />
-      <Form
-        boardWidth={boardWidth}
-        boardHeight={boardHeight}
-        setBoardWidth={setBoardWidth}
-        setBoardHeight={setBoardHeight}
-        cellSize={cellSize}
-        setCellSize={setCellSize}
-        refreshRate={refreshRate}
-        setRefreshRate={setRefreshRate}
-      />
+      <PatternsForm cells={cells} setCells={setCells} />
     </StyledContainer>
   );
 }

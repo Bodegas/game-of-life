@@ -1,53 +1,17 @@
 import React from "react";
-import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
+import {
+  StyledContainer,
+  StyledForm,
+  StyledFormHead,
+  StyledLabel,
+  StyledInput,
+  StyledSelect,
+  StyledSubmit,
+} from "../styles";
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 4em;
-`;
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  margin-top: 2em;
-`;
-
-const StyledFormHead = styled.div`
-  font-size: 1.7em;
-  font-weight: bold;
-`;
-
-const StyledLabel = styled.label`
-  font-size: 1em;
-  margin-bottom: 0.5em;
-`;
-
-const StyledInput = styled.input`
-  font-size: 1em;
-  margin-bottom: 1em;
-  max-width: 5em;
-`;
-
-const StyledSelect = styled.select`
-  font-size: 1em;
-  margin-bottom: 1em;
-  width: fit-content;
-  padding-right: 0.5em;
-`;
-
-const StyledSubmit = styled.input`
-  margin-top: 1em;
-  width: fit-content;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-  padding-left: 1em;
-  padding-right: 1em;
-`;
-
-const Form = ({
+const ConfigurationBoardForm = ({
   boardWidth,
   boardHeight,
   setBoardWidth,
@@ -60,7 +24,6 @@ const Form = ({
   const { register, handleSubmit } = useForm();
 
   const onSubmit = (values) => {
-    console.log({ values });
     setBoardWidth(values.boardWidth);
     setBoardHeight(values.boardHeight);
     setCellSize(values.cellSize);
@@ -96,7 +59,6 @@ const Form = ({
           defaultValue={cellSize}
         >
           <option value={10}>10</option>
-          <option value={15}>15</option>
           <option value={20}>20</option>
         </StyledSelect>
         <StyledLabel htmlFor="refreshRate">Refresh rate</StyledLabel>
@@ -111,8 +73,8 @@ const Form = ({
   );
 };
 
-Form.displayName = "Form";
-Form.propTypes = {
+ConfigurationBoardForm.displayName = "ConfigurationBoardForm";
+ConfigurationBoardForm.propTypes = {
   boardWidth: PropTypes.number,
   boardHeight: PropTypes.number,
   setBoardWidth: PropTypes.func,
@@ -123,4 +85,4 @@ Form.propTypes = {
   setRefreshRate: PropTypes.func,
 };
 
-export default Form;
+export default ConfigurationBoardForm;

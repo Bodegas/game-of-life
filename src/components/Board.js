@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { getColumsNumber, getRowsNumber } from "../helpers";
 
 const Grid = styled.div`
   background: black;
@@ -12,6 +13,8 @@ const Grid = styled.div`
     `repeat(${columnsNumber}, ${cellSize}px)`};
   grid-template-rows: ${({ rowsNumber, cellSize }) =>
     `repeat(${rowsNumber}, ${cellSize}px)`};
+  margin-left: 4em;
+  margin-right: 4em;
 `;
 
 const Cell = styled.div`
@@ -23,14 +26,16 @@ const Cell = styled.div`
 const Board = ({
   cells,
   cellSize,
-  columnsNumber,
-  rowsNumber,
+  height,
   toggleRunning,
+  width,
 }) => {
+  const columnsNumber = getColumsNumber(width, cellSize);
+  const rowsNumber = getRowsNumber(height, cellSize);
   return (
     <Grid
-      width={columnsNumber * cellSize}
-      height={rowsNumber * cellSize}
+      width={width}
+      height={height}
       color="black"
       cellSize={cellSize}
       columnsNumber={columnsNumber}
@@ -46,9 +51,9 @@ Board.displayName = "Board";
 Board.propTypes = {
   cells: PropTypes.array,
   cellSize: PropTypes.number,
-  columnsNumber: PropTypes.number,
-  rowsNumber: PropTypes.number,
+  height: PropTypes.number,
   toggleRunning: PropTypes.func,
+  width: PropTypes.number,
 };
 
 export default Board;
