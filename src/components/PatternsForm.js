@@ -1,50 +1,21 @@
 import React from "react";
-import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import {
-  StyledButton,
   StyledContainer,
   StyledForm,
   StyledFormHead,
-  StyledInput,
-  StyledLabel,
-  StyledSelect,
+  PatternsBlock,
+  Column,
+  CustomStyledLabel,
+  CustomStyledSelect,
+  CustomStyledInput,
+  StyledButtonAdd
 } from "../styles";
 import { applyPattern } from "../helpers";
 import * as PATTERNS from "../patterns";
 
-const CustomStyledSelect = styled(StyledSelect)`
-  padding-top: 0.1em;
-  padding-bottom: 0.1em;
-  margin-bottom: 0;
-`;
-
-const CustomStyledInput = styled(StyledInput)`
-  max-width: 3em;
-  margin-bottom: 0;
-  text-align: right;
-`;
-
-const CustomStyledButton = styled(StyledButton)`
-  margin-left: 0.5em;
-`;
-
-const CustomStyledLabel = styled(StyledLabel)``;
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 0.5em;
-  align-items: center;
-  justify-content: flex-end;
-`;
-
-const PatternsBlock = styled.div`
-  display: flex;
-`;
-
-const PatternsForm = ({ cells, setCells }) => {
+const PatternsForm = ({ cells, setCells, running }) => {
   const { register, handleSubmit } = useForm();
 
   const handleAddPattern = (values) => {
@@ -64,9 +35,16 @@ const PatternsForm = ({ cells, setCells }) => {
         <PatternsBlock>
           <Column>
             <CustomStyledLabel htmlFor="pattern">Pattern</CustomStyledLabel>
-            <CustomStyledSelect {...register("pattern")} defaultValue={"block"}>
-              <option value="BLOCK">Block</option>
-              <option value="BEEHIVE">Beehive</option>
+            <CustomStyledSelect
+              {...register("pattern")}
+              defaultValue={"block"}
+              disabled={running}
+            >
+              {Object.keys(PATTERNS).map((pattern) => (
+                <option key={pattern} value={pattern}>
+                  {`${pattern.charAt(0) + pattern.slice(1).toLowerCase()}`}
+                </option>
+              ))}
             </CustomStyledSelect>
           </Column>
 
@@ -76,6 +54,7 @@ const PatternsForm = ({ cells, setCells }) => {
               {...register("x", { setValueAs: (v) => parseInt(v) })}
               type="text"
               defaultValue={0}
+              disabled={running}
             />
           </Column>
 
@@ -85,11 +64,14 @@ const PatternsForm = ({ cells, setCells }) => {
               {...register("y", { setValueAs: (v) => parseInt(v) })}
               type="text"
               defaultValue={0}
+              disabled={running}
             />
           </Column>
 
           <Column>
-            <CustomStyledButton type="submit">Add</CustomStyledButton>
+            <StyledButtonAdd type="submit" disabled={running}>
+              Add
+            </StyledButtonAdd>
           </Column>
         </PatternsBlock>
       </StyledForm>
@@ -101,6 +83,7 @@ PatternsForm.displayName = "PatternsForm";
 PatternsForm.propTypes = {
   cells: PropTypes.array,
   setCells: PropTypes.func,
+  running: PropTypes.bool,
 };
 
 export default PatternsForm;

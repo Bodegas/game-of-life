@@ -1,13 +1,30 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { getColumsNumber, getRowsNumber } from "../helpers";
-import Board from "./Board.js";
-import ConfigurationBoardForm from "./ConfigurationBoardForm.js";
+import Board from "./Board";
+import ConfigurationBoardForm from "./ConfigurationBoardForm";
 import PatternsForm from "./PatternsForm";
+import SetupsForm from "./SetupsForm";
+import {
+  StyledAppContainer,
+  StyledButton,
+  StyledButtonContainer,
+} from "../styles";
 
-const StyledContainer = styled.div`
-  display: flex;
-  font-size: 12px;
+const StyledButtonGo = styled(StyledButton)`
+  font-size: 1.5em;
+  font-weight: bold;
+  background-color: #578f17;
+  border: 2px solid #443e3c;
+  color: #443e3c;
+`;
+
+const StyledButtonStop = styled(StyledButton)`
+  font-size: 1.5em;
+  font-weight: bold;
+  background-color: #c31414;
+  border: 2px solid #443e3c;
+  color: #443e3c;
 `;
 
 const getEmptyCellsState = (boardWidth, boardHeight, cellSize) => {
@@ -97,7 +114,12 @@ function GameView() {
   const [running, setRunning] = useState(false);
 
   useEffect(() => {
-    const getNewCells = async () => {
+    setRunning(false);
+    setCells(getEmptyCellsState(boardWidth, boardHeight, cellSize));
+  }, [boardWidth, boardHeight, cellSize]);
+
+  useEffect(() => {
+    const setNewState = async () => {
       const newCells = await new Promise((resolve) =>
         setTimeout(() => {
           const newCells = applyRules(cells);
@@ -108,20 +130,16 @@ function GameView() {
     };
 
     if (running) {
-      getNewCells();
+      setNewState();
     }
   }, [refreshRate, cells, running, setCells]);
-
-  useEffect(() => {
-    setCells(getEmptyCellsState(boardWidth, boardHeight, cellSize));
-  }, [boardWidth, boardHeight, cellSize]);
 
   const toggleRunning = () => {
     setRunning((running) => !running);
   };
 
   return (
-    <StyledContainer>
+    <StyledAppContainer>
       <ConfigurationBoardForm
         boardHeight={boardHeight}
         boardWidth={boardWidth}
@@ -131,16 +149,36 @@ function GameView() {
         setBoardWidth={setBoardWidth}
         setCellSize={setCellSize}
         setRefreshRate={setRefreshRate}
+        running={running}
       />
       <Board
         cells={cells}
         cellSize={cellSize}
         height={boardHeight}
-        toggleRunning={toggleRunning}
         width={boardWidth}
       />
-      <PatternsForm cells={cells} setCells={setCells} />
-    </StyledContainer>
+      <div>
+        <PatternsForm
+          cells={cells}
+          setCells={setCells}
+          running={running}
+          toogleRunning={toggleRunning}
+        />
+        <SetupsForm
+          cells={cells}
+          setCells={setCells}
+          running={running}
+          toogleRunning={toggleRunning}
+        />
+        <StyledButtonContainer>
+          {running ? (
+            <StyledButtonStop onClick={toggleRunning}>Stop</StyledButtonStop>
+          ) : (
+            <StyledButtonGo onClick={toggleRunning}>Go!</StyledButtonGo>
+          )}
+        </StyledButtonContainer>
+      </div>
+    </StyledAppContainer>
   );
 }
 

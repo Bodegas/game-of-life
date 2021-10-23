@@ -8,7 +8,6 @@ import {
   StyledLabel,
   StyledInput,
   StyledSelect,
-  StyledSubmit,
 } from "../styles";
 
 const ConfigurationBoardForm = ({
@@ -20,24 +19,36 @@ const ConfigurationBoardForm = ({
   setCellSize,
   refreshRate,
   setRefreshRate,
+  running
 }) => {
-  const { register, handleSubmit } = useForm();
+  const { register, } = useForm();
 
-  const onSubmit = (values) => {
-    setBoardWidth(values.boardWidth);
-    setBoardHeight(values.boardHeight);
-    setCellSize(values.cellSize);
-    setRefreshRate(values.refreshRate);
+  const handleChangeWidth = event => {
+    setBoardWidth(Number(event.target.value));
+  };
+
+  const handleChangeHeight = event => {
+    setBoardHeight(Number(event.target.value));
+  };
+
+  const handleChangeCells = event => {
+    setCellSize(Number(event.target.value));
+  };
+
+  const handleChangeRate = event => {
+    setRefreshRate(Number(event.target.value));
   };
 
   return (
     <StyledContainer>
       <StyledFormHead>Board setup</StyledFormHead>
-      <StyledForm onSubmit={handleSubmit(onSubmit)}>
+      <StyledForm>
         <StyledLabel htmlFor="boardWidth">Width</StyledLabel>
         <StyledSelect
           {...register("boardWidth", { setValueAs: (v) => parseInt(v) })}
           defaultValue={boardWidth}
+          onChange={handleChangeWidth}
+          disabled={running}
         >
           <option value={700}>700</option>
           <option value={800}>800</option>
@@ -47,6 +58,8 @@ const ConfigurationBoardForm = ({
         <StyledSelect
           {...register("boardHeight", { setValueAs: (v) => parseInt(v) })}
           defaultValue={boardHeight}
+          onChange={handleChangeHeight}
+          disabled={running}
         >
           <option value={700}>700</option>
           <option value={800}>800</option>
@@ -57,6 +70,8 @@ const ConfigurationBoardForm = ({
           {...register("cellSize", { setValueAs: (v) => parseInt(v) })}
           type="number"
           defaultValue={cellSize}
+          onChange={handleChangeCells}
+          disabled={running}
         >
           <option value={10}>10</option>
           <option value={20}>20</option>
@@ -66,8 +81,9 @@ const ConfigurationBoardForm = ({
           {...register("refreshRate", { setValueAs: (v) => parseInt(v) })}
           type="number"
           defaultValue={refreshRate}
+          onChange={handleChangeRate}
+          disabled={running}
         />
-        <StyledSubmit type="submit" value="Apply" />
       </StyledForm>
     </StyledContainer>
   );
@@ -83,6 +99,7 @@ ConfigurationBoardForm.propTypes = {
   setCellSize: PropTypes.func,
   refreshRate: PropTypes.number,
   setRefreshRate: PropTypes.func,
+  running: PropTypes.bool,
 };
 
 export default ConfigurationBoardForm;
