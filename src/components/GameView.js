@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
 import { getColumsNumber, getRowsNumber } from "../helpers";
 import Board from "./Board";
 import ConfigurationBoardForm from "./ConfigurationBoardForm";
@@ -7,32 +6,16 @@ import PatternsForm from "./PatternsForm";
 import SetupsForm from "./SetupsForm";
 import {
   StyledAppContainer,
-  StyledButton,
+  StyledButtonGo,
+  StyledButtonStop,
   StyledButtonContainer,
 } from "../styles";
 
-const StyledButtonGo = styled(StyledButton)`
-  font-size: 1.5em;
-  font-weight: bold;
-  background-color: #578f17;
-  border: 2px solid #443e3c;
-  color: #443e3c;
-`;
-
-const StyledButtonStop = styled(StyledButton)`
-  font-size: 1.5em;
-  font-weight: bold;
-  background-color: #c31414;
-  border: 2px solid #443e3c;
-  color: #443e3c;
-`;
 
 const getEmptyCellsState = (boardWidth, boardHeight, cellSize) => {
   const columnsNumber = getColumsNumber(boardWidth, cellSize);
   const rowsNumber = getRowsNumber(boardHeight, cellSize);
-  let state = Array(columnsNumber)
-    .fill()
-    .map(() => Array(rowsNumber).fill(0));
+  let state = Array.from({length: columnsNumber}, () => Array(rowsNumber).fill(0));
   return state;
 };
 

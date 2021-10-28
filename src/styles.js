@@ -34,9 +34,25 @@ export const StyledLabel = styled.label`
 `;
 
 export const StyledInput = styled.input`
+  border: none;
   font-size: 1em;
-  margin-bottom: 1em;
   max-width: 5em;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-right: 0.5em;
+  background-color: #EDEDED;
+  :disabled {
+    color: #000000;
+    background-color: #EDEDED;
+    opacity: 0.7;
+  }
+  :focus {
+    outline: none;
+    background-color: #FFFFFF;
+  }
+  :hover {
+    background-color: #FFFFFF;
+  }
 `;
 
 export const StyledSelect = styled.select`
@@ -44,6 +60,22 @@ export const StyledSelect = styled.select`
   margin-bottom: 1em;
   width: fit-content;
   padding-right: 0.5em;
+  border: none;
+  background-color: #EDEDED;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  :disabled {
+    color: #000000;
+    background-color: #EDEDED;
+    opacity: 0.7;
+  }
+  :focus {
+    outline: none;
+    background-color: #FFFFFF;
+  }
+  :hover {
+    background-color: #FFFFFF;
+  }
 `;
 
 export const StyledSubmit = styled.input`
@@ -56,12 +88,25 @@ export const StyledSubmit = styled.input`
 `;
 
 export const StyledButton = styled.button`
+  border: none;
+  border-radius: 0.2em;
+  cursor: pointer;
   width: fit-content;
-  font-size: 0.9em;
-  padding-top: 0.2em;
-  padding-bottom: 0.2em;
-  padding-left: 0.4em;
-  padding-right: 0.4em;
+  font-size: 1em;
+  font-weight: bold;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+  background-color: #828282;
+  :disabled {
+    color: #000000;
+    background-color: #828282;
+    opacity: 0.7;
+  }
+  :hover {
+    background-color: #B9B9B9;
+  }
 `;
 
 export const Grid = styled.div`
@@ -80,8 +125,8 @@ export const Grid = styled.div`
 
 export const Cell = styled.div`
   background: ${(props) => (props.alive ? "white" : "black")};
-  border-top: 1px solid grey;
-  border-left: 1px solid grey;
+  border-top: 1px solid #939393;
+  border-left: 1px solid #939393;
 `;
 
 export const StyledButtonContainer = styled.div`
@@ -104,8 +149,6 @@ export const PatternsBlock = styled.div`
 `;
 
 export const CustomStyledSelect = styled(StyledSelect)`
-  padding-top: 0.1em;
-  padding-bottom: 0.1em;
   margin-bottom: 0;
 `;
 
@@ -119,4 +162,31 @@ export const CustomStyledLabel = styled(StyledLabel)``;
 
 export const StyledButtonAdd = styled(StyledButton)`
   margin-left: 0.5em;
+`;
+
+export const StyledButtonApply = styled(StyledButton)`
+  margin-left: 0.5em;
+  padding-bottom: 4px;
+`;
+
+export const StyledButtonGo = styled(StyledButton)`
+  font-size: 1.5em;
+  font-weight: bold;
+  background-color: #028C3A;
+  border: 2px solid black;
+  :hover {
+    background-color: #00AE46;
+  }
+  color: black;
+`;
+
+export const StyledButtonStop = styled(StyledButton)`
+  font-size: 1.5em;
+  font-weight: bold;
+  background-color: #c31414;
+  border: 2px solid black;
+  color: black;
+  :hover {
+    background-color: #FB0000;
+  }
 `;

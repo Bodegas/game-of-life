@@ -27,7 +27,7 @@ const getSetup2 = (state) => {
   let newState = applyPattern({
     pattern: PATTERNS.PULSAR,
     state: state,
-    initialX: 60,
+    initialX: 40,
     initialY: 10,
   });
   newState = applyPattern({
@@ -40,20 +40,20 @@ const getSetup2 = (state) => {
     pattern: PATTERNS.PENTADECATHLON,
     state: newState,
     initialX: 60,
-    initialY: 60,
+    initialY: 55,
   });
   newState = applyPattern({
     pattern: PATTERNS.GLIDER,
     state: newState,
     initialX: 30,
-    initialY: 40,
+    initialY: 35,
   });
   return newState;
 };
 
 const setups = {
-  setup1: getSetup1,
-  setup2: getSetup2,
+  Setup1: getSetup1,
+  Setup2: getSetup2,
 };
 
 export default setups;

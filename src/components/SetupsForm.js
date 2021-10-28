@@ -8,7 +8,7 @@ import {
   PatternsBlock,
   Column,
   CustomStyledSelect,
-  StyledButtonAdd,
+  StyledButtonApply,
 } from "../styles";
 import SETUPS from "../setups";
 
@@ -16,7 +16,8 @@ const SetupsForm = ({ cells, setCells, running, toogleRunning }) => {
   const { register, handleSubmit } = useForm();
 
   const handleApplySetup = (values) => {
-    const newState = SETUPS[values.setup](cells);
+    const emptyCells = Array.from({length: cells.length}, () => Array(cells[0].length).fill(0));
+    const newState = SETUPS[values.setup](emptyCells);
     setCells(newState);
   };
 
@@ -40,9 +41,9 @@ const SetupsForm = ({ cells, setCells, running, toogleRunning }) => {
           </Column>
 
           <Column>
-            <StyledButtonAdd type="submit" disabled={running}>
+            <StyledButtonApply type="submit" disabled={running}>
               Apply
-            </StyledButtonAdd>
+            </StyledButtonApply>
           </Column>
         </PatternsBlock>
       </StyledForm>

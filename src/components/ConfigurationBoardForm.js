@@ -41,7 +41,7 @@ const ConfigurationBoardForm = ({
 
   return (
     <StyledContainer>
-      <StyledFormHead>Board setup</StyledFormHead>
+      <StyledFormHead>Board configuration</StyledFormHead>
       <StyledForm>
         <StyledLabel htmlFor="boardWidth">Width</StyledLabel>
         <StyledSelect
