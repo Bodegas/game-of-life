@@ -76,10 +76,12 @@ const ConfigurationBoardForm = ({
           <option value={10}>10</option>
           <option value={20}>20</option>
         </StyledSelect>
-        <StyledLabel htmlFor="refreshRate">Refresh rate</StyledLabel>
+        <StyledLabel htmlFor="refreshRate">Refresh rate (ms)</StyledLabel>
         <StyledInput
           {...register("refreshRate", { setValueAs: (v) => parseInt(v) })}
           type="number"
+          step={100}
+          min={0}
           defaultValue={refreshRate}
           onChange={handleChangeRate}
           disabled={running}

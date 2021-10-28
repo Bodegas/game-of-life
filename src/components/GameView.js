@@ -11,11 +11,12 @@ import {
   StyledButtonContainer,
 } from "../styles";
 
-
 const getEmptyCellsState = (boardWidth, boardHeight, cellSize) => {
   const columnsNumber = getColumsNumber(boardWidth, cellSize);
   const rowsNumber = getRowsNumber(boardHeight, cellSize);
-  let state = Array.from({length: columnsNumber}, () => Array(rowsNumber).fill(0));
+  let state = Array.from({ length: columnsNumber }, () =>
+    Array(rowsNumber).fill(0)
+  );
   return state;
 };
 
@@ -96,6 +97,24 @@ function GameView() {
   );
   const [running, setRunning] = useState(false);
 
+  // useEffect(() => {
+  //   window.addEventListener("mousedown", (e) => {
+  //     if (e.button === 1) {
+  //       setMouseDown(true);
+  //     }
+  //   });
+
+  //   window.addEventListener("mouseup", (e) => {
+  //     if (e.button === 1) {
+  //       setMouseDown(false);
+  //     }
+  //   });
+  //   return () => {
+  //     window.removeEventListener("mousedown");
+  //     window.removeEventListener("mouseup");
+  //   };
+  // }, []);
+
   useEffect(() => {
     setRunning(false);
     setCells(getEmptyCellsState(boardWidth, boardHeight, cellSize));
@@ -139,6 +158,7 @@ function GameView() {
         cellSize={cellSize}
         height={boardHeight}
         width={boardWidth}
+        setCells={setCells}
       />
       <div>
         <PatternsForm

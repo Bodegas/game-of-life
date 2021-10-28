@@ -16,3 +16,10 @@ export const applyPattern = ({ pattern, state, initialX, initialY }) => {
   );
   return newState;
 };
+
+export const flipOneCell = ({cells, x, y}) => {
+    const value = cells[x][y] ? 0 : 1; // Shift value
+    const newCells = cells.map((column) => [...column]);
+    newCells[x][y] = value;
+    return newCells;
+};
