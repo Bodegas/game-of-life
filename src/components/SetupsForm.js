@@ -12,7 +12,7 @@ import {
 } from "../styles";
 import SETUPS from "../setups";
 
-const SetupsForm = ({ cells, setCells, running, toogleRunning }) => {
+const SetupsForm = ({ cells, setCells, running }) => {
   const { register, handleSubmit } = useForm();
 
   const handleApplySetup = (values) => {
@@ -55,7 +55,6 @@ SetupsForm.displayName = "SetupsForm";
 SetupsForm.propTypes = {
   cells: PropTypes.array,
   setCells: PropTypes.func,
-  toogleRunning: PropTypes.func,
   running: PropTypes.bool,
 };
 

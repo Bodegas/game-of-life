@@ -1,6 +1,8 @@
-export const getColumsNumber = (boardWidth, cellSize) => Math.floor(boardWidth / cellSize);
+export const getColumsNumber = (boardWidth, cellSize) =>
+  Math.floor(boardWidth / cellSize);
 
-export const getRowsNumber = (boardHeight, cellSize) => Math.floor(boardHeight / cellSize);
+export const getRowsNumber = (boardHeight, cellSize) =>
+  Math.floor(boardHeight / cellSize);
 
 export const applyPattern = ({ pattern, state, initialX, initialY }) => {
   const columnsNumber = state.length;
@@ -17,9 +19,9 @@ export const applyPattern = ({ pattern, state, initialX, initialY }) => {
   return newState;
 };
 
-export const flipOneCell = ({cells, x, y}) => {
-    const value = cells[x][y] ? 0 : 1; // Shift value
-    const newCells = cells.map((column) => [...column]);
-    newCells[x][y] = value;
-    return newCells;
+export const flipOneCell = ({ cells, x, y }) => {
+  const value = cells[x][y] ? 0 : 1; // Shift value
+  const newCells = cells.map((column) => [...column]);
+  newCells[x][y] = value;
+  return newCells;
 };
