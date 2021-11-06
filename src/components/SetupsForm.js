@@ -16,7 +16,7 @@ const SetupsForm = ({ cells, setCells, running }) => {
   const { register, handleSubmit } = useForm();
 
   const handleApplySetup = (values) => {
-    const emptyCells = Array.from({length: cells.length}, () => Array(cells[0].length).fill(0));
+    const emptyCells = Array.from({ length: cells.length }, () => Array(cells[0].length).fill(0));
     const newState = SETUPS[values.setup](emptyCells);
     setCells(newState);
   };
@@ -27,11 +27,7 @@ const SetupsForm = ({ cells, setCells, running }) => {
       <StyledForm onSubmit={handleSubmit(handleApplySetup)}>
         <PatternsBlock>
           <Column>
-            <CustomStyledSelect
-              {...register("setup")}
-              defaultValue={"block"}
-              disabled={running}
-            >
+            <CustomStyledSelect {...register("setup")} defaultValue={"block"} disabled={running}>
               {Object.keys(SETUPS).map((setup) => (
                 <option key={setup} value={setup}>
                   {`${setup.charAt(0) + setup.slice(1).toLowerCase()}`}

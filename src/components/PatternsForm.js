@@ -10,7 +10,7 @@ import {
   CustomStyledLabel,
   CustomStyledSelect,
   CustomStyledInput,
-  StyledButtonAdd
+  StyledButtonAdd,
 } from "../styles";
 import { applyPattern } from "../helpers";
 import * as PATTERNS from "../patterns";
@@ -35,11 +35,7 @@ const PatternsForm = ({ cells, setCells, running }) => {
         <PatternsBlock>
           <Column>
             <CustomStyledLabel htmlFor="pattern">Pattern</CustomStyledLabel>
-            <CustomStyledSelect
-              {...register("pattern")}
-              defaultValue={"block"}
-              disabled={running}
-            >
+            <CustomStyledSelect {...register("pattern")} defaultValue={"block"} disabled={running}>
               {Object.keys(PATTERNS).map((pattern) => (
                 <option key={pattern} value={pattern}>
                   {`${pattern.charAt(0) + pattern.slice(1).toLowerCase()}`}

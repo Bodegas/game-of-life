@@ -19,23 +19,23 @@ const ConfigurationBoardForm = ({
   setCellSize,
   refreshRate,
   setRefreshRate,
-  running
+  running,
 }) => {
-  const { register, } = useForm();
+  const { register } = useForm();
 
-  const handleChangeWidth = event => {
+  const handleChangeWidth = (event) => {
     setBoardWidth(Number(event.target.value));
   };
 
-  const handleChangeHeight = event => {
+  const handleChangeHeight = (event) => {
     setBoardHeight(Number(event.target.value));
   };
 
-  const handleChangeCells = event => {
+  const handleChangeCells = (event) => {
     setCellSize(Number(event.target.value));
   };
 
-  const handleChangeRate = event => {
+  const handleChangeRate = (event) => {
     setRefreshRate(Number(event.target.value));
   };
 

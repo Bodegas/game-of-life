@@ -40,18 +40,18 @@ export const StyledInput = styled.input`
   padding-top: 3px;
   padding-bottom: 3px;
   padding-right: 0.5em;
-  background-color: #EDEDED;
+  background-color: #ededed;
   :disabled {
     color: #000000;
-    background-color: #EDEDED;
+    background-color: #ededed;
     opacity: 0.7;
   }
   :focus {
     outline: none;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
   }
   :hover {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
   }
 `;
 
@@ -61,20 +61,20 @@ export const StyledSelect = styled.select`
   width: fit-content;
   padding-right: 0.5em;
   border: none;
-  background-color: #EDEDED;
+  background-color: #ededed;
   padding-top: 2px;
   padding-bottom: 2px;
   :disabled {
     color: #000000;
-    background-color: #EDEDED;
+    background-color: #ededed;
     opacity: 0.7;
   }
   :focus {
     outline: none;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
   }
   :hover {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
   }
 `;
 
@@ -105,7 +105,7 @@ export const StyledButton = styled.button`
     opacity: 0.7;
   }
   :hover {
-    background-color: #B9B9B9;
+    background-color: #b9b9b9;
   }
 `;
 
@@ -117,8 +117,7 @@ export const Grid = styled.div`
   grid-auto-flow: column;
   grid-template-columns: ${({ columnsNumber, cellSize }) =>
     `repeat(${columnsNumber}, ${cellSize}px)`};
-  grid-template-rows: ${({ rowsNumber, cellSize }) =>
-    `repeat(${rowsNumber}, ${cellSize}px)`};
+  grid-template-rows: ${({ rowsNumber, cellSize }) => `repeat(${rowsNumber}, ${cellSize}px)`};
   margin-left: 4em;
   margin-right: 4em;
 `;
@@ -172,10 +171,10 @@ export const StyledButtonApply = styled(StyledButton)`
 export const StyledButtonGo = styled(StyledButton)`
   font-size: 1.5em;
   font-weight: bold;
-  background-color: #028C3A;
+  background-color: #028c3a;
   border: 2px solid black;
   :hover {
-    background-color: #00AE46;
+    background-color: #00ae46;
   }
   color: black;
 `;
@@ -187,6 +186,6 @@ export const StyledButtonStop = styled(StyledButton)`
   border: 2px solid black;
   color: black;
   :hover {
-    background-color: #FB0000;
+    background-color: #fb0000;
   }
 `;

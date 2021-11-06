@@ -14,9 +14,7 @@ import {
 const getEmptyCellsState = (boardWidth, boardHeight, cellSize) => {
   const columnsNumber = getColumsNumber(boardWidth, cellSize);
   const rowsNumber = getRowsNumber(boardHeight, cellSize);
-  let state = Array.from({ length: columnsNumber }, () =>
-    Array(rowsNumber).fill(0)
-  );
+  let state = Array.from({ length: columnsNumber }, () => Array(rowsNumber).fill(0));
   return state;
 };
 
@@ -92,9 +90,7 @@ function GameView() {
   const [boardHeight, setBoardHeight] = useState(900);
   const [cellSize, setCellSize] = useState(10);
   const [refreshRate, setRefreshRate] = useState(0);
-  const [cells, setCells] = useState(() =>
-    getEmptyCellsState(boardWidth, boardHeight, cellSize)
-  );
+  const [cells, setCells] = useState(() => getEmptyCellsState(boardWidth, boardHeight, cellSize));
   const [running, setRunning] = useState(false);
 
   // useEffect(() => {

@@ -1,8 +1,6 @@
-export const getColumsNumber = (boardWidth, cellSize) =>
-  Math.floor(boardWidth / cellSize);
+export const getColumsNumber = (boardWidth, cellSize) => Math.floor(boardWidth / cellSize);
 
-export const getRowsNumber = (boardHeight, cellSize) =>
-  Math.floor(boardHeight / cellSize);
+export const getRowsNumber = (boardHeight, cellSize) => Math.floor(boardHeight / cellSize);
 
 export const applyPattern = ({ pattern, state, initialX, initialY }) => {
   const columnsNumber = state.length;
