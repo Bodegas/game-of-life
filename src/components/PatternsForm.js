@@ -1,6 +1,6 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
+import React from "react";
 import {
   StyledContainer,
   StyledForm,
@@ -17,7 +17,6 @@ import * as PATTERNS from "../patterns";
 
 const PatternsForm = ({ cells, setCells, running }) => {
   const { register, handleSubmit } = useForm();
-
   const handleAddPattern = (values) => {
     const newState = applyPattern({
       pattern: PATTERNS[values.pattern],
