@@ -15,7 +15,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "prepare": "husky install"
   },
   "browserslist": {
     "production": [
@@ -35,6 +36,11 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^11.2.6",
     "prettier": "^2.4.1"
+  },
+  "lint-staged": {
+    "src/**/*.js":["prettier --write", "eslint"]
   }
 }
